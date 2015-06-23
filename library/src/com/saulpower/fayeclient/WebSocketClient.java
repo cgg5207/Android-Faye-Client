@@ -173,15 +173,19 @@ public class WebSocketClient {
     }
 
     private void onError(final Exception ex) {
-
-        mUiHandler.post(new Runnable() {
-
-            @Override
-            public void run() {
-
-                mListener.onError(ex);
-            }
-        });
+		try {
+            mUiHandler.post(new Runnable() {
+    
+                @Override
+                public void run() {
+    
+                    mListener.onError(ex);
+                }
+            });
+        }catch (Exception e) {
+			mListener.onDisconnect(0, "Other error");
+			Log.e(TAG, "bug Websocket Other error!", ex);
+		}
     }
 
     private String createSecretValidation(String secret) {
